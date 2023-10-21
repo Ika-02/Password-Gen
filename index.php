@@ -6,31 +6,31 @@ if (isset($_GET['longueur'])) {
     $old_length = 12;
 }
 if (isset($_GET['minuscule'])) {
-    //$old_min = $_GET['nbr-min'];
+    $old_min = $_GET['nbr-min'];
     $old_min_checked = 'checked';
 } else {
-    //$old_min = 5;
+    $old_min = 5;
     $old_min_checked = '';
 }
 if (isset($_GET['majuscule'])) {
-    //$old_maj = $_GET['nbr-maj'];
+    $old_maj = $_GET['nbr-maj'];
     $old_maj_checked = 'checked';
 } else {
-    //$old_maj = 5;
+    $old_maj = 5;
     $old_maj_checked = '';
 }
 if (isset($_GET['chiffre'])) {
-    //$old_chiffre = $_GET['nbr-chiffre'];
+    $old_chiffre = $_GET['nbr-chiffre'];
     $old_chiffre_checked = 'checked';
 } else {
-    //$old_chiffre = 5;
+    $old_chiffre = 5;
     $old_chiffre_checked = '';
 }
 if (isset($_GET['special'])) {
-    //$old_special = $_GET['nbr-special'];
+    $old_special = $_GET['nbr-special'];
     $old_special_checked = 'checked';
 } else {
-    //$old_special = 5;
+    $old_special = 5;
     $old_special_checked = '';
 }
 
@@ -91,22 +91,22 @@ if (!isset($_GET['majuscule']) && !isset($_GET['minuscule']) && !isset($_GET['ch
             <p><label for="minuscule">
                 <input type="checkbox" name="minuscule" id="minuscule" <?=$old_min_checked?>>
                 Lowercase
-                <!--<input type="number" name="nbr-min" step="1" min="1" max="64" value="<?=$old_min?>">-->
+                <input type="number" name="nbr-min" step="1" min="1" max="64" value="<?=$old_min?>">
             </label>
             <p><label for="majuscule">
                 <input type="checkbox" name="majuscule" id="majuscule" <?=$old_maj_checked?>>
                 Uppercase
-                <!--<input type="number" name="nbr-maj" step="1" min="1" max="64" value="<?=$old_maj?>">-->
+                <input type="number" name="nbr-maj" step="1" min="1" max="64" value="<?=$old_maj?>">
             </label>
             <p><label for="chiffre">
                 <input type="checkbox" name="chiffre" id="chiffre" <?=$old_chiffre_checked?>>
                 Numbers
-                <!--<input type="number" name="nbr-chiffre" step="1" min="1" max="64" value="<?=$old_chiffre?>">-->
+                <input type="number" name="nbr-chiffre" step="1" min="1" max="64" value="<?=$old_chiffre?>">
             </label>
             <p><label for="special">
                 <input type="checkbox" name="special" id="special" <?=$old_special_checked?>>
                 Special characters
-                <!--<input type="number" name="nbr-special" step="1" min="1" max="64" value="<?=$old_special?>">-->
+                <input type="number" name="nbr-special" step="1" min="1" max="64" value="<?=$old_special?>">
             </label>
             <p><input type="submit" name="generate" value="Generate">
         </fieldset>

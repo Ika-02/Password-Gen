@@ -1,6 +1,9 @@
 # 🔐 Password Generator
- Password generator I made to practice some php (and ended up making it pretty 😅)
 
-## 📃 Future
+Little **password generator** I made to practice some *php* (and ended up also making it pretty. I couldn't help myself 😅)
 
--> I plan to add the possibility to choose the minimum number for each character type but haven't figured out how to do it 😆...
+I didn't do error handling and all. I might do it later, I still haven't learned about that. 🤣 
+
+Nothing more to say about it...
+
+@ika-02

@@ -3,45 +3,35 @@
 if (isset($_GET['longueur'])) {
     $old_length = $_GET['longueur'];
 } else {
-    $old_length = 12;
+    $old_length = 16; // Default length
 }
 if (isset($_GET['minuscule'])) {
-    //$old_min = $_GET['nbr-min'];
+    $old_min = $_GET['nbr-min'];
     $old_min_checked = 'checked';
 } else {
-    //$old_min = 5;
+    $old_min = 4; // Default number of lowercase characters
     $old_min_checked = '';
 }
 if (isset($_GET['majuscule'])) {
-    //$old_maj = $_GET['nbr-maj'];
+    $old_maj = $_GET['nbr-maj'];
     $old_maj_checked = 'checked';
 } else {
-    //$old_maj = 5;
+    $old_maj = 4; // Default number of uppercase characters
     $old_maj_checked = '';
 }
 if (isset($_GET['chiffre'])) {
-    //$old_chiffre = $_GET['nbr-chiffre'];
+    $old_chiffre = $_GET['nbr-chiffre'];
     $old_chiffre_checked = 'checked';
 } else {
-    //$old_chiffre = 5;
+    $old_chiffre = 4; // Default number of numbers
     $old_chiffre_checked = '';
 }
 if (isset($_GET['special'])) {
-    //$old_special = $_GET['nbr-special'];
+    $old_special = $_GET['nbr-special'];
     $old_special_checked = 'checked';
 } else {
-    //$old_special = 5;
+    $old_special = 4; // Default number of special characters
     $old_special_checked = '';
-}
-
-// function to generate a password
-function generate($length, $alphabet)
-{
-    $password = '';
-    for ($i = 0; $i < $length; $i++) {
-        $password .= $alphabet[rand(0, strlen($alphabet) - 1)];
-    }
-    return $password;
 }
 
 // Generating password according to the settings
@@ -49,20 +39,37 @@ if (!isset($_GET['majuscule']) && !isset($_GET['minuscule']) && !isset($_GET['ch
     $password = "Select at least one character type";
 } else {
     $alphabet = '';
+    $password = '';
+
     if (isset($_GET['majuscule'])) {
         $alphabet .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        for ($i = 0; $i < $_GET['nbr-maj']; $i++) {
+            $password .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[rand(0, 25)];
+        }
     }
     if (isset($_GET['minuscule'])) {
         $alphabet .= 'abcdefghijklmnopqrstuvwxyz';
+        for ($i = 0; $i < $_GET['nbr-min']; $i++) {
+            $password .= 'abcdefghijklmnopqrstuvwxyz'[rand(0, 25)];
+        }    
     }
     if (isset($_GET['chiffre'])) {
         $alphabet .= '0123456789';
+        for ($i = 0; $i < $_GET['nbr-chiffre']; $i++) {
+            $password .= '0123456789'[rand(0, 9)];
+        }
     }
     if (isset($_GET['special'])) {
         $alphabet .= '!@#$%^&*()_-+=;:,./?';
+        for ($i = 0; $i < $_GET['nbr-special']; $i++) {
+            $password .= '!@#$%^&*()_-+=;:,./?'[rand(0, 19)];
+        }
     }
-    $password = generate($_GET['longueur'], $alphabet);
+
     $password = str_shuffle($password);
+    while (strlen($password) < $_GET['longueur']) {
+        $password .= $alphabet[rand(0, strlen($alphabet) - 1)];
+    }
 }
 ?><!DOCTYPE html>
 <html>
@@ -91,22 +98,22 @@ if (!isset($_GET['majuscule']) && !isset($_GET['minuscule']) && !isset($_GET['ch
             <p><label for="minuscule">
                 <input type="checkbox" name="minuscule" id="minuscule" <?=$old_min_checked?>>
                 Lowercase
-                <!--<input type="number" name="nbr-min" step="1" min="1" max="64" value="<?=$old_min?>">-->
+                <input type="number" name="nbr-min" step="1" min="1" max="64" value="<?=$old_min?>">
             </label>
             <p><label for="majuscule">
                 <input type="checkbox" name="majuscule" id="majuscule" <?=$old_maj_checked?>>
                 Uppercase
-                <!--<input type="number" name="nbr-maj" step="1" min="1" max="64" value="<?=$old_maj?>">-->
+                <input type="number" name="nbr-maj" step="1" min="1" max="64" value="<?=$old_maj?>">
             </label>
             <p><label for="chiffre">
                 <input type="checkbox" name="chiffre" id="chiffre" <?=$old_chiffre_checked?>>
                 Numbers
-                <!--<input type="number" name="nbr-chiffre" step="1" min="1" max="64" value="<?=$old_chiffre?>">-->
+                <input type="number" name="nbr-chiffre" step="1" min="1" max="64" value="<?=$old_chiffre?>">
             </label>
             <p><label for="special">
                 <input type="checkbox" name="special" id="special" <?=$old_special_checked?>>
                 Special characters
-                <!--<input type="number" name="nbr-special" step="1" min="1" max="64" value="<?=$old_special?>">-->
+                <input type="number" name="nbr-special" step="1" min="1" max="64" value="<?=$old_special?>">
             </label>
             <p><input type="submit" name="generate" value="Generate">
         </fieldset>

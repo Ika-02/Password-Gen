@@ -67,7 +67,7 @@ input[type="checkbox"] {cursor: pointer;}
 input[type="number"] {visibility: hidden;}
 input:checked + input[type="number"] {
     visibility: visible;
-    margin-left: 5  px;
+    margin-left: 5px;
     width: 40px;
     border-radius: 5px;
     background-color: var(--white);

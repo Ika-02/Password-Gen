@@ -2,8 +2,7 @@
 
 Little **password generator** I made to practice some *php* (and ended up also making it pretty. I couldn't help myself 😅)
 
-I didn't do error handling and all. I might do it later, I still haven't learned about that. 🤣 
-
+I might still improve it if I'm bored 😆
 Nothing more to say about it...
 
 @ika-02

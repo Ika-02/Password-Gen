@@ -1,76 +1,75 @@
 <?php
-// Gettings old values from url or setting default values -> to keep the same values when the form is submitted
+$old_length = 16; // Default length
+$lowercase = 4; // Default number of lowercase characters
+$uppercase = 4; // Default number of uppercase characters
+$numbers = 4; // Default number of numbers
+$specials = 4; // Default number of special characters
+$characters_list = ['lowercase', 'uppercase', 'numbers', 'specials'];
+$selected_options = [];
+
 if (isset($_GET['longueur'])) {
-    $old_length = $_GET['longueur'];
-} else {
-    $old_length = 16; // Default length
-}
-if (isset($_GET['minuscule'])) {
-    $old_min = $_GET['nbr-min'];
-    $old_min_checked = 'checked';
-} else {
-    $old_min = 4; // Default number of lowercase characters
-    $old_min_checked = '';
-}
-if (isset($_GET['majuscule'])) {
-    $old_maj = $_GET['nbr-maj'];
-    $old_maj_checked = 'checked';
-} else {
-    $old_maj = 4; // Default number of uppercase characters
-    $old_maj_checked = '';
-}
-if (isset($_GET['chiffre'])) {
-    $old_chiffre = $_GET['nbr-chiffre'];
-    $old_chiffre_checked = 'checked';
-} else {
-    $old_chiffre = 4; // Default number of numbers
-    $old_chiffre_checked = '';
-}
-if (isset($_GET['special'])) {
-    $old_special = $_GET['nbr-special'];
-    $old_special_checked = 'checked';
-} else {
-    $old_special = 4; // Default number of special characters
-    $old_special_checked = '';
+    if ($_GET['longueur'] < 6) { $old_length = 6; }
+    elseif ($_GET['longueur'] > 64) { $old_length = 64; }
+    else { $old_length = $_GET['longueur']; }
+} 
+
+if ( isset($_GET['characters']) ) {
+    foreach ($_GET['characters'] as $option) {
+        if ( in_array($option, $characters_list)) {
+            $selected_options[$option] = $_GET['nbr-'.$option];
+            switch ($option) {
+                case 'lowercase':
+                    $lowercase = $_GET['nbr-'.$option];
+                    break;
+                case 'uppercase':
+                    $uppercase = $_GET['nbr-'.$option];
+                    break;
+                case 'numbers':
+                    $numbers = $_GET['nbr-'.$option];
+                    break;
+                case 'specials':
+                    $specials = $_GET['nbr-'.$option];
+                    break;
+            }
+        }
+    }
 }
 
 // Generating password according to the settings
-if (!isset($_GET['majuscule']) && !isset($_GET['minuscule']) && !isset($_GET['chiffre']) && !isset($_GET['special'])) {
+if (empty($_GET['characters'])) {
     $password = "Select at least one character type";
 } else {
-    $alphabet = '';
-    $password = '';
+    $length = 0;
+    foreach ($selected_options as $option => $value) { $length += intval($value); }
+    if ($length > $old_length) { $password = "The sum of the number of characters of each type must be less than the length of the password"; }
 
-    if (isset($_GET['majuscule'])) {
-        $alphabet .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        for ($i = 0; $i < $_GET['nbr-maj']; $i++) {
-            $password .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[rand(0, 25)];
+    else {
+        $alphabet = '';
+        $password = '';
+        foreach ($selected_options as $option => $value) {
+            switch ($option) {
+                case 'lowercase':
+                    $alphabet .= 'abcdefghijklmnopqrstuvwxyz';
+                    for ($i = 0; $i < $value; $i++) { $password .= 'abcdefghijklmnopqrstuvwxyz'[rand(0, 25)]; }
+                    break;
+                case 'uppercase':
+                    $alphabet .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+                    for ($i = 0; $i < $value; $i++) { $password .= 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'[rand(0, 25)]; }
+                    break;
+                case 'numbers':
+                    $alphabet .= '0123456789';
+                    for ($i = 0; $i < $value; $i++) { $password .= '0123456789'[rand(0, 9)]; }
+                    break;
+                case 'specials':
+                    $alphabet .= '!@#$%^&*()_-+=;:,./?';
+                    for ($i = 0; $i < $value; $i++) { $password .= '!@#$%^&*()_-+=;:,./?'[rand(0, 19)]; }
+                    break;
+            }
         }
+        $password = str_shuffle($password);
+        while (strlen($password) < $old_length) { $password .= $alphabet[rand(0, strlen($alphabet) - 1)]; }
     }
-    if (isset($_GET['minuscule'])) {
-        $alphabet .= 'abcdefghijklmnopqrstuvwxyz';
-        for ($i = 0; $i < $_GET['nbr-min']; $i++) {
-            $password .= 'abcdefghijklmnopqrstuvwxyz'[rand(0, 25)];
-        }    
-    }
-    if (isset($_GET['chiffre'])) {
-        $alphabet .= '0123456789';
-        for ($i = 0; $i < $_GET['nbr-chiffre']; $i++) {
-            $password .= '0123456789'[rand(0, 9)];
-        }
-    }
-    if (isset($_GET['special'])) {
-        $alphabet .= '!@#$%^&*()_-+=;:,./?';
-        for ($i = 0; $i < $_GET['nbr-special']; $i++) {
-            $password .= '!@#$%^&*()_-+=;:,./?'[rand(0, 19)];
-        }
-    }
-
-    $password = str_shuffle($password);
-    while (strlen($password) < $_GET['longueur']) {
-        $password .= $alphabet[rand(0, strlen($alphabet) - 1)];
-    }
-}
+}   
 ?><!DOCTYPE html>
 <html>
 <head>
@@ -79,6 +78,7 @@ if (!isset($_GET['majuscule']) && !isset($_GET['minuscule']) && !isset($_GET['ch
     <meta name="author" content="Ioka">
     <meta name="robots" content="none">
     <meta name="description" content="A configurable password generator made by Ioka using php.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Gabarito:wght@500&display=swap" rel="stylesheet">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>"/>
@@ -95,26 +95,14 @@ if (!isset($_GET['majuscule']) && !isset($_GET['minuscule']) && !isset($_GET['ch
                 <input type="range" name="longueur" id="longueur" step="1" min="6" max="64", value="<?=$old_length?>" oninput="this.nextElementSibling.value = this.value">
                 <output><?=$old_length?></output>
             </label>
-            <p><label for="minuscule">
-                <input type="checkbox" name="minuscule" id="minuscule" <?=$old_min_checked?>>
-                Lowercase
-                <input type="number" name="nbr-min" step="1" min="1" max="64" value="<?=$old_min?>">
+            <?php foreach ($characters_list as $option) { ?>
+			<p><label for="choix<?=$option?>">
+				<input type="checkbox" name="characters[]" value="<?=$option?>" id="choix<?=$option?>"
+                <?php if ( array_key_exists($option, $selected_options) ) echo ' checked'; ?>>
+                <?=ucfirst($option)?>
+                <input type="number" name="nbr-<?=$option?>" min="1" max="64" value="<?=$$option?>">
             </label>
-            <p><label for="majuscule">
-                <input type="checkbox" name="majuscule" id="majuscule" <?=$old_maj_checked?>>
-                Uppercase
-                <input type="number" name="nbr-maj" step="1" min="1" max="64" value="<?=$old_maj?>">
-            </label>
-            <p><label for="chiffre">
-                <input type="checkbox" name="chiffre" id="chiffre" <?=$old_chiffre_checked?>>
-                Numbers
-                <input type="number" name="nbr-chiffre" step="1" min="1" max="64" value="<?=$old_chiffre?>">
-            </label>
-            <p><label for="special">
-                <input type="checkbox" name="special" id="special" <?=$old_special_checked?>>
-                Special characters
-                <input type="number" name="nbr-special" step="1" min="1" max="64" value="<?=$old_special?>">
-            </label>
+            <?php } ?>
             <p><input type="submit" name="generate" value="Generate">
         </fieldset>
     </form>

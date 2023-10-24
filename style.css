@@ -5,6 +5,7 @@
 }
 
 body {
+    min-width: 350px;
     font-family: 'Gabarito', sans-serif;
     text-align: center;
     /* Background pattern */
@@ -39,12 +40,9 @@ form {
     margin: 0 auto;
     width: 30%;
     background-image: linear-gradient(144deg,#8608b4, #492fed 60%,#bd6fda);
-    border: none;
     border-radius: 30px;
     padding-top: 10px;
-    position: relative;
     margin: auto;
-    font-family: inherit;
     color: var(--white);
 }
 fieldset {
@@ -60,9 +58,16 @@ legend {
 input[type="range"] {
     margin: 0 auto;
     cursor: pointer;
+    transform: scale(1.2);
+    margin-left: 15px;
+    margin-right: 20px;
+    vertical-align: middle;
 }
 
-input[type="checkbox"] {cursor: pointer;}
+input[type="checkbox"] {
+    transform: scale(1.5);
+    cursor: pointer;
+}
 
 input[type="number"] {visibility: hidden;}
 input:checked + input[type="number"] {
@@ -92,4 +97,16 @@ footer {
     margin-top: 40px;
     color: var(--white);
     font-style: italic;
+}
+
+/* Responsive */
+@media screen and (max-width: 900px) {
+    form { width: 50%; }
+}
+@media screen and (max-width: 550px) {
+    form { width: 80%; }
+    input[type="text"] {
+        width: 80%;
+        font-size: 12px;
+    }
 }
